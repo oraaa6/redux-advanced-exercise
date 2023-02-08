@@ -1,15 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { items: [], totalQuantity: 0 };
+const initialState = { items: [], totalQuantity: 0, changed: false };
 
 const cartSlice = createSlice({
   name: "cart",
   initialState: initialState,
   reducers: {
+    replaceCart(state, action) {
+      state.totalQuantity = action.payload.totalQuantity;
+      state.items = action.payload.items;
+    }, // reducer do ZAMIANY karty która jest na frontendzie, na taką z backendu (po fetchowniu)
     addItemToCart(state, action) {
       const newItem = action.payload; // osobny obiekt to bedzie, który będzie pushowany do tej pustej tablicy
       const existingItem = state.items.find((item) => item.id === newItem.id); //sprawdza czy ten item (obiekt) istnieje juz w tablicy
       state.totalQuantity++;
+      state.changed = true // czy karta się zmieniła - to jest po to, żeby useEffect z wysyaniem zapytania w App z cart w tabliicy zależnoości, nie wywoływał się kiedy będą pobierane dane (bo wtedy karta się zmienia)
       if (!existingItem) {
         state.items.push({
           id: newItem.id,

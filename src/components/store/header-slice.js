@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialCartsState = { mealsNumber: 0, showCart: false };
+const initialCartsState = { showCart: false, notification: null };
 
 const headerSlice = createSlice({
   name: "header",
@@ -8,6 +8,13 @@ const headerSlice = createSlice({
   reducers: {
     toggleCart(state) {
       state.showCart = !state.showCart;
+    },
+    showNotification(state, action) {
+      state.notification = {
+        status: action.payload.status,
+        title: action.payload.title,
+        message: action.payload.message,
+      }; // wyświetlanie statusu, tytułu, wiadomosci(error itp) podczas request PUT
     },
   },
 });
